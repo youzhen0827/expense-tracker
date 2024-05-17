@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>記帳表</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="./style.css">
+        <script src="./jquery-3.5.1.js:1"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2 class="text-center">記帳表</h2>
+            <h1 id="balance">$0.00</h1>
+
+            <div>
+                
+            </div>
+            <div class="inc-exp-container">
+                <div>
+                    <h4>收入</h4>
+                    <p id="money-plus" class="money plus">+0.00</p>
+                </div>
+                <div>
+                    <h4>支出</h4>
+                    <p id="money-minus" class="money minus">-0.00</p>
+                </div>
+            </div>
+            <div>
+                <ul>
+                    <label for="months">選擇月份：</label>
+                    <button id="monthBtn01" type="01">一月</button>
+                    <button id="monthBtn02" type="02">二月</button>
+                    <button id="monthBtn03" type="03">三月</button>
+                    <button id="monthBtn04" type="04">四月</button>
+                    <button id="monthBtn05" type="05">五月</button>
+                    <button id="monthBtn06" type="06">六月</button>
+                    <button id="monthBtn07" type="07">七月</button>
+                    <button id="monthBtn08" type="08">八月</button>
+                    <button id="monthBtn09" type="09">九月</button>
+                    <button id="monthBtn10" type="10">十月</button>
+                    <button id="monthBtn11" type="11">十一月</button>
+                    <button id="monthBtn12" type="12">十二月</button>
+                </ul>
+            </div>
+            <div>
+                <h3 id="output"></h3>
+                <ul id="'list" class="'list"></ul>
+            </div>
+
+            
+            <form id="form">
+                <div>
+                    <ul>
+                        
+                        <label for="text">項目</label>
+                        <input type="text" id="text" placeholder="輸入項目">
+                    </ul>
+                </div>
+                <div>
+                    <ul>
+                        <label for="text">金額</label>
+                        <input type="number" id="number" placeholder="輸入金額">
+                    </ul>
+                </div>
+                <ul>
+                    <button id="addBtn" class="btn">新增</button>
+                </ul>
+            </form> 
+            
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+	    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
+        <script src="./index.js"></script>
+    </body>
+</html>
