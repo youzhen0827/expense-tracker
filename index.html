@@ -1,145 +1,22 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+
+<html lang="zh-TW" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>記帳本</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #222635;
-    --border: #2e3348;
-    --text: #e8eaf0;
-    --text-dim: #8b90a7;
-    --green: #27c97e;
-    --green-dim: rgba(39,201,126,0.12);
-    --red: #f05b6e;
-    --red-dim: rgba(240,91,110,0.12);
-    --accent: #5b8ef5;
-    --accent-dim: rgba(91,142,245,0.12);
-    --mono: 'DM Mono', monospace;
-    --sans: 'Noto Sans TC', sans-serif;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--sans);
-    min-height: 100vh;
-    padding: 40px 20px 80px;
-  }
-  .app { max-width: 780px; margin: 0 auto; }
-
-  header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 36px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid var(--border);
-  }
-  .logo { font-size: 11px; letter-spacing: 4px; text-transform: uppercase; color: var(--text-dim); font-family: var(--mono); }
-  .year-badge { font-family: var(--mono); font-size: 12px; color: var(--accent); background: var(--accent-dim); padding: 4px 12px; border-radius: 20px; letter-spacing: 1px; }
-
-  .balance-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 32px 36px;
-    margin-bottom: 16px;
-    position: relative;
-    overflow: hidden;
-  }
-  .balance-card::before {
-    content: '';
-    position: absolute; top: -60px; right: -60px;
-    width: 200px; height: 200px;
-    background: radial-gradient(circle, rgba(91,142,245,0.08) 0%, transparent 70%);
-    pointer-events: none;
-  }
-  .balance-label { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); font-family: var(--mono); margin-bottom: 10px; }
-  .balance-amount { font-family: var(--mono); font-size: 48px; font-weight: 500; letter-spacing: -1px; line-height: 1; transition: color 0.3s; }
-  .balance-amount.positive { color: var(--green); }
-  .balance-amount.negative { color: var(--red); }
-  .balance-amount.zero { color: var(--text); }
-
-  .stats-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 28px; }
-  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 20px 24px; display: flex; align-items: center; gap: 16px; }
-  .stat-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .stat-icon.income { background: var(--green-dim); }
-  .stat-icon.expense { background: var(--red-dim); }
-  .stat-info { flex: 1; }
-  .stat-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-family: var(--mono); margin-bottom: 4px; }
-  .stat-amount { font-family: var(--mono); font-size: 22px; font-weight: 500; }
-  .stat-amount.income { color: var(--green); }
-  .stat-amount.expense { color: var(--red); }
-
-  .section-title { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-dim); font-family: var(--mono); margin-bottom: 14px; }
-  .month-filter { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
-  .month-btn { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; color: var(--text-dim); font-family: var(--sans); font-size: 13px; padding: 7px 14px; cursor: pointer; transition: all 0.2s; }
-  .month-btn:hover { border-color: var(--accent); color: var(--text); }
-  .month-btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); font-weight: 500; }
-  .month-btn.all-btn.active { background: var(--surface2); border-color: var(--text-dim); color: var(--text); }
-
-  .add-form { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 24px 28px; margin-bottom: 28px; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; align-items: end; }
-  .form-actions { display: flex; gap: 10px; margin-top: 12px; }
-  .form-field label { display: block; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); font-family: var(--mono); margin-bottom: 8px; }
-  .form-field input, .form-field select { background: var(--bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: var(--sans); font-size: 14px; padding: 10px 14px; width: 100%; transition: border-color 0.2s; outline: none; }
-  .form-field input:focus, .form-field select:focus { border-color: var(--accent); }
-  .form-field select option { background: var(--surface2); }
-
-  .add-btn { background: var(--accent); border: none; border-radius: 10px; color: #fff; font-family: var(--sans); font-size: 14px; font-weight: 500; padding: 10px 24px; cursor: pointer; transition: all 0.2s; white-space: nowrap; height: 42px; }
-  .add-btn:hover { background: #7aa4f7; transform: translateY(-1px); }
-  .clear-btn { background: transparent; border: 1px solid var(--border); border-radius: 10px; color: var(--text-dim); font-family: var(--sans); font-size: 13px; padding: 10px 18px; cursor: pointer; transition: all 0.2s; height: 42px; white-space: nowrap; }
-  .clear-btn:hover { border-color: var(--red); color: var(--red); }
-
-  .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-  .tx-count { font-family: var(--mono); font-size: 12px; color: var(--text-dim); }
-
-  .tx-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-  .tx-item { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; display: flex; align-items: center; padding: 14px 18px; gap: 14px; animation: slideIn 0.25s ease; transition: border-color 0.2s; }
-  .tx-item:hover { border-color: var(--surface2); }
-
-  @keyframes slideIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
-
-  .tx-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-  .tx-dot.income { background: var(--green); box-shadow: 0 0 6px var(--green); }
-  .tx-dot.expense { background: var(--red); box-shadow: 0 0 6px var(--red); }
-
-  .tx-info { flex: 1; }
-  .tx-name { font-size: 14px; font-weight: 500; margin-bottom: 3px; }
-  .tx-meta { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
-
-  .tx-amount { font-family: var(--mono); font-size: 16px; font-weight: 500; min-width: 100px; text-align: right; }
-  .tx-amount.income { color: var(--green); }
-  .tx-amount.expense { color: var(--red); }
-
-  .tx-delete { background: transparent; border: 1px solid transparent; border-radius: 8px; color: var(--text-dim); cursor: pointer; font-size: 14px; padding: 4px 8px; transition: all 0.2s; line-height: 1; }
-  .tx-delete:hover { border-color: var(--red); color: var(--red); background: var(--red-dim); }
-
-  .empty-state { text-align: center; padding: 60px 20px; color: var(--text-dim); }
-  .empty-state .empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.4; }
-  .empty-state p { font-size: 13px; letter-spacing: 1px; }
-
-  .toast { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--surface2); border: 1px solid var(--border); border-radius: 12px; padding: 12px 24px; font-size: 13px; color: var(--text); opacity: 0; transition: all 0.3s; pointer-events: none; z-index: 999; white-space: nowrap; }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-  @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr 1fr; }
-    .balance-amount { font-size: 32px; }
-    .stats-row { grid-template-columns: 1fr 1fr; }
-  }
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <div class="app">
 
   <header>
-    <div class="logo">💰 記帳本</div>
-    <div class="year-badge" id="yearBadge"></div>
+    <div class="logo"><span>💰</span> 記帳本</div>
+    <div class="header-right">
+      <div class="year-badge" id="yearBadge"></div>
+      <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">☀️ 淺色</button>
+    </div>
   </header>
 
   <div class="balance-card">
@@ -164,25 +41,34 @@
     </div>
   </div>
 
-  <div class="section-title">月份篩選</div>
-  <div class="month-filter" id="monthFilter">
-    <button class="month-btn all-btn active" data-month="all">全部</button>
-    <button class="month-btn" data-month="1">一月</button>
-    <button class="month-btn" data-month="2">二月</button>
-    <button class="month-btn" data-month="3">三月</button>
-    <button class="month-btn" data-month="4">四月</button>
-    <button class="month-btn" data-month="5">五月</button>
-    <button class="month-btn" data-month="6">六月</button>
-    <button class="month-btn" data-month="7">七月</button>
-    <button class="month-btn" data-month="8">八月</button>
-    <button class="month-btn" data-month="9">九月</button>
-    <button class="month-btn" data-month="10">十月</button>
-    <button class="month-btn" data-month="11">十一月</button>
-    <button class="month-btn" data-month="12">十二月</button>
+  <div class="month-section">
+    <div class="section-title">月份篩選</div>
+    <div class="month-filter" id="monthFilter">
+      <button class="month-btn all-btn active" data-month="all">全部</button>
+      <button class="month-btn" data-month="1">一月</button>
+      <button class="month-btn" data-month="2">二月</button>
+      <button class="month-btn" data-month="3">三月</button>
+      <button class="month-btn" data-month="4">四月</button>
+      <button class="month-btn" data-month="5">五月</button>
+      <button class="month-btn" data-month="6">六月</button>
+      <button class="month-btn" data-month="7">七月</button>
+      <button class="month-btn" data-month="8">八月</button>
+      <button class="month-btn" data-month="9">九月</button>
+      <button class="month-btn" data-month="10">十月</button>
+      <button class="month-btn" data-month="11">十一月</button>
+      <button class="month-btn" data-month="12">十二月</button>
+    </div>
+    <div class="month-detail" id="monthDetail">
+      <div class="month-detail-title">
+        <span id="monthDetailTitle"></span>
+        <div class="month-detail-stats" id="monthDetailStats"></div>
+      </div>
+      <ul class="month-tx-list" id="monthTxList"></ul>
+    </div>
   </div>
 
   <div class="add-form">
-    <div class="section-title" style="margin-bottom:16px">新增記錄</div>
+    <div class="section-title">新增記錄</div>
     <div class="form-grid">
       <div class="form-field">
         <label>項目名稱</label>
@@ -226,116 +112,6 @@
 </div>
 
 <div class="toast" id="toast"></div>
-
-<script>
-  let transactions = JSON.parse(localStorage.getItem('ledger_v2')) || [];
-  let activeMonth = 'all';
-
-  const today = new Date();
-  document.getElementById('yearBadge').textContent = today.getFullYear() + ' 年';
-  document.getElementById('txDate').value = today.toISOString().split('T')[0];
-
-  document.getElementById('monthFilter').addEventListener('click', function(e) {
-    const btn = e.target.closest('.month-btn');
-    if (!btn) return;
-    document.querySelectorAll('.month-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeMonth = btn.dataset.month;
-    render();
-  });
-
-  function addTransaction() {
-    const name     = document.getElementById('txName').value.trim();
-    const amount   = parseFloat(document.getElementById('txAmount').value);
-    const date     = document.getElementById('txDate').value;
-    const category = document.getElementById('txCategory').value;
-
-    if (!name)         { showToast('⚠️ 請輸入項目名稱'); return; }
-    if (isNaN(amount)) { showToast('⚠️ 請輸入有效金額'); return; }
-    if (!date)         { showToast('⚠️ 請選擇日期'); return; }
-
-    transactions.unshift({ id: Date.now(), name, amount, date, category });
-    save();
-    render();
-    document.getElementById('txName').value = '';
-    document.getElementById('txAmount').value = '';
-    showToast(amount >= 0 ? '✅ 收入已新增' : '✅ 支出已新增');
-  }
-
-  function deleteTransaction(id) {
-    transactions = transactions.filter(t => t.id !== id);
-    save();
-    render();
-    showToast('🗑 已刪除');
-  }
-
-  function clearAll() {
-    if (!transactions.length) return;
-    if (!confirm('確定要清除全部記錄嗎？')) return;
-    transactions = [];
-    save();
-    render();
-    showToast('🗑 已清除全部記錄');
-  }
-
-  function filtered() {
-    if (activeMonth === 'all') return transactions;
-    return transactions.filter(t => (new Date(t.date).getMonth() + 1) === parseInt(activeMonth));
-  }
-
-  function render() {
-    const list   = filtered();
-    const income  = list.filter(t => t.amount > 0).reduce((s, t) => s + t.amount, 0);
-    const expense = list.filter(t => t.amount < 0).reduce((s, t) => s + t.amount, 0);
-    const balance = income + expense;
-
-    const balEl = document.getElementById('balance');
-    balEl.textContent = fmtSigned(balance);
-    balEl.className = 'balance-amount ' + (balance > 0 ? 'positive' : balance < 0 ? 'negative' : 'zero');
-
-    document.getElementById('totalIncome').textContent  = fmt(income);
-    document.getElementById('totalExpense').textContent = fmt(Math.abs(expense));
-    document.getElementById('txCount').textContent = list.length + ' 筆';
-
-    const listEl = document.getElementById('txList');
-    if (!list.length) {
-      listEl.innerHTML = `<li class="empty-state"><div class="empty-icon">📋</div><p>尚無記錄${activeMonth !== 'all' ? '（此月份）' : ''}</p></li>`;
-      return;
-    }
-
-    listEl.innerHTML = list.map(t => {
-      const isIncome = t.amount >= 0;
-      const d = new Date(t.date);
-      const dateStr = `${d.getMonth()+1}/${d.getDate()}`;
-      return `<li class="tx-item">
-        <div class="tx-dot ${isIncome ? 'income' : 'expense'}"></div>
-        <div class="tx-info">
-          <div class="tx-name">${esc(t.name)}</div>
-          <div class="tx-meta">${dateStr} &nbsp;·&nbsp; ${esc(t.category)}</div>
-        </div>
-        <div class="tx-amount ${isIncome ? 'income' : 'expense'}">${isIncome ? '+' : ''}${fmtSigned(t.amount)}</div>
-        <button class="tx-delete" onclick="deleteTransaction(${t.id})" title="刪除">✕</button>
-      </li>`;
-    }).join('');
-  }
-
-  function save()       { localStorage.setItem('ledger_v2', JSON.stringify(transactions)); }
-  function fmt(n)       { return '$' + Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
-  function fmtSigned(n) { return (n < 0 ? '-' : '') + '$' + Math.abs(n).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
-  function esc(s)       { return String(s).replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-  function showToast(msg) {
-    const t = document.getElementById('toast');
-    t.textContent = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2200);
-  }
-
-  ['txName','txAmount'].forEach(id => {
-    document.getElementById(id).addEventListener('keydown', e => { if (e.key === 'Enter') addTransaction(); });
-  });
-
-  render();
-</script>
+<script src="index.js"></script>
 </body>
 </html>
