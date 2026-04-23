@@ -1,6 +1,6 @@
 # 記帳本 💰
 
-以純前端技術打造的個人記帳 Web App，無需後端、無需安裝，資料儲存於瀏覽器本地端。
+以HTML、CSS、JavaScript打造的個人記帳 Web App，無需後端、無需安裝，資料儲存於瀏覽器本地端。
 
 🔗 **[Live Demo](https://youzhen0827.github.io/expense-tracker/)**
 
@@ -8,7 +8,7 @@
 
 ## 畫面截圖
 
-> *(放截圖在這裡)*
+> 
 
 -----
 
