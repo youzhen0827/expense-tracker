@@ -2,7 +2,7 @@
 
 以純前端技術（HTML / CSS / JavaScript）打造的個人記帳 Web App，無需後端、無需安裝，資料儲存於瀏覽器本地端。
 
-🔗 **[Live Demo]([https://youzhen0827.github.io/expense-tracker/])**
+🔗 **[Live Demo]([[https://youzhen0827.github.io/expense-tracker/](https://youzhen0827.github.io/expense-tracker/)])**
 
 -----
 
